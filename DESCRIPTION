@@ -2,7 +2,7 @@ Package: insideFlow
 Title: What the Package Does (One Line, Title Case)
 Version: 1.0.0
 Authors@R: 
-    person("Joshua", "Luthy", , "jluthy123@gmail.com", role = c("aut", "cre"))
+    person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))
 Description: Takes outputs from R-based FlowJo plugin processes and manages the
   data and workflow by storing the input data, metadata, and new derived parameters
   from running algortithms such as clustering, dimesionality reduction, batch correction,

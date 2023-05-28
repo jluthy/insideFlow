@@ -1,3 +1,5 @@
 ^insideFlow\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^revdep$
+^CRAN-SUBMISSION$

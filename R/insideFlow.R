@@ -2,7 +2,7 @@
 #'
 #'
 NULL
-#' 
+#'
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Class definition
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -191,7 +191,7 @@ setGeneric("loadFlowJoCSV", function(object, csvPath) {
 setMethod("loadFlowJoCSV",
           "insideFlow",
           function(object, csvPath){
-            data <- fread(csvPath, check.names=FALSE)
+            data <- read.csv(csvPath, check.names=FALSE)
             cellIdsColumn <- rep(NA, nrow(data))
             cellIds <- data.frame(CellIdDP = cellIdsColumn)
             names(cellIds) <- CellIdDP
