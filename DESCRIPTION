@@ -4,9 +4,9 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Joshua", "Luthy", , "jluthy123@gmail.com", role = c("aut", "cre"))
 Description: Takes outputs from R-based FlowJo plugin processes and manages the
-data and workflow by storing the input data, metadata, and new derived parameters
-from running algortithms such as clustering, dimesionality reduction, batch correction,
-or data cleamup.
+  data and workflow by storing the input data, metadata, and new derived parameters
+  from running algortithms such as clustering, dimesionality reduction, batch correction,
+  or data cleamup.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
