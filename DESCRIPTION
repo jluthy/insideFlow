@@ -1,5 +1,5 @@
 Package: insideFlow
-Title: insideFlow: Manage R-based FlowJo Plugin Processes
+Title: Manage R-based FlowJo Plugin Processes
 Version: 1.0.1
 Authors@R: 
     person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))

@@ -25,7 +25,7 @@
 #' @slot DimReduction The low-dimensional embedding result and map
 #' @slot ClustRCheck The results from cluster evaluation with ClustRCheck
 #' @slot Taylor The results from cluster evaluation via Taylor Index
-#'
+#' @docType class
 #' @name insideFlow-class
 #'
 insideFlow <- setClass("insideFlow",
@@ -101,6 +101,7 @@ insideFlow <- setClass("insideFlow",
 #' @rdname getRunID
 #' @examples \dontrun{
 #' getRunID(object)}
+#' @docType methods
 #' @export
 setGeneric("getRunID", function(object) {
   standardGeneric("getRunID")
@@ -121,6 +122,7 @@ setMethod("getRunID",
 #' @rdname getParNames
 #' @examples \dontrun{
 #' getParNames(object)}
+#' @docType methods
 #' @export
 setGeneric("getParNames", function(object) {
   standardGeneric("getParNames")
@@ -145,6 +147,7 @@ setMethod("getParNames",
 #' @rdname getStainNames
 #' @examples \dontrun{
 #' getStainNames(object)}
+#' @docType methods
 #' @export
 setGeneric("getStainNames", function(object) {
   standardGeneric("getStainNames")
@@ -169,15 +172,16 @@ setMethod("getStainNames",
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param csvPath The path to the exported csv file from FlowJo
-#' @rdname loadFlowJoCSV
 #' @importFrom data.table fread
 #' @examples \dontrun{
 #' inputCSVpath <- "/Documents/ExtNode.csv"
 #' myobject <- loadFlowJoCSV(object, inputCSVpath)}
+#' @docType methods
 #' @export
 setGeneric("loadFlowJoCSV", function(object, csvPath) {
   standardGeneric("loadFlowJoCSV")
 })
+#' @rdname loadFlowJoCSV
 setMethod("loadFlowJoCSV",
           "insideFlow",
           function(object, csvPath){
@@ -229,15 +233,16 @@ setMethod("loadFlowJoCSV",
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param data The data object to load into insideFlow object
-#' @rdname loadFlowJoDataTable
 #' @importFrom data.table fread
 #' @examples \dontrun{
 #' exMatrix <- fread("/Documents/ExtNode.csv")
 #' myobject <- loadFlowJoDataTable(object, exMatrix)}
+#' @docType methods
 #' @export
 setGeneric("loadFlowJoDataTable", function(object, data) {
   standardGeneric("loadFlowJoDataTable")
 })
+#' @rdname loadFlowJoDataTable
 setMethod("loadFlowJoDataTable",
           "insideFlow",
           function(object, data){
@@ -290,13 +295,14 @@ setMethod("loadFlowJoDataTable",
 #' @param fjMarkersList The selected list of markers to normalize
 #' @param fjCofactor The selected Cofactor value to apply
 #' @importFrom cyCombine transform_asinh
-#' @rdname prepareBEC
 #' @examples \dontrun{
 #' myobject <- prepareBEC(object, markers, cofact)}
+#' @docType methods
 #' @export
 setGeneric("prepareBEC", function(object, fjMarkersList, fjCofactor){
   standardGeneric("prepareBEC")
 })
+#' @rdname prepareBEC
 setMethod("prepareBEC",
           "insideFlow",
           function(object, fjMarkersList, fjCofactor){
@@ -323,13 +329,14 @@ setMethod("prepareBEC",
 #' @param ydim The second dimension of SOM used
 #' @importFrom cyCombine normalize
 #' @importFrom cyCombine create_som
-#' @rdname runBatch_correct
 #' @examples \dontrun{
 #' myobject <- runBatch_correct(object, bID, nrmMethod, xdim, ydim)}
+#' @docType methods
 #' @export
 setGeneric("runBatch_correct", function(object, batchID, normMethod, xdim, ydim){
   standardGeneric("runBatch_correct")
 })
+#' @rdname runBatch_correct
 setMethod("runBatch_correct",
           "insideFlow",
           function(object, batchID, normMethod, xdim, ydim){
@@ -362,13 +369,14 @@ setMethod("runBatch_correct",
 #' @param fjCofactor The selected Cofactor value to apply
 #' @param outPutFolder The path to the output folder
 #' @importFrom cyCombine plot_density
-#' @rdname normalizedPlots
 #' @examples \dontrun{
 #' normalizedPlots(object, popName, coFact, outsFolder)}
+#' @docType methods
 #' @export
 setGeneric("normalizedPlots", function(object, fjPopName, fjCofactor, outPutFolder){
   standardGeneric("normalizedPlots")
 })
+#' @rdname normalizedPlots
 setMethod("normalizedPlots",
           "insideFlow",
           function(object, fjPopName, fjCofactor, outPutFolder){
@@ -399,13 +407,14 @@ setMethod("normalizedPlots",
 #' @param object A insideFlow object
 #' @param fjCofactor The selected Cofactor value to apply
 #' @importFrom cyCombine transform_asinh
-#' @rdname reverseTransform
 #' @examples \dontrun{
 #' myobject <- reverseTransform(object, popName, coFact, outsFolder)}
+#' @docType methods
 #' @export
 setGeneric("reverseTransform", function(object, fjCofactor){
   standardGeneric("reverseTransform")
 })
+#' @rdname reverseTransform
 setMethod("reverseTransform",
           "insideFlow",
           function(object, fjCofactor){
@@ -427,13 +436,14 @@ setMethod("reverseTransform",
 #' @return Returns the light-weight object cleaned of transformed data slots
 #' from batch correction processes
 #' @param object A insideFlow object
-#' @rdname cleanupFJobj
 #' @examples \dontrun{
 #' myobject <- cleanupFJobj(object)}
+#' @docType methods
 #' @export
 setGeneric("cleanupFJobj", function(object){
   standardGeneric("cleanupFJobj")
 })
+#' @rdname cleanupFJobj
 setMethod("cleanupFJobj",
           "insideFlow",
           function(object){
@@ -469,13 +479,14 @@ setMethod("cleanupFJobj",
 #' @param object A insideFlow object
 #' @param dropCompPrefix Boolean to allow for paramName cleanup
 #' @importFrom methods new
-#' @rdname flowFrameFromFlowJoCSV
 #' @examples \dontrun{
 #' myobject <- flowFrameFromFlowJoCSV(object, popName, coFact, outsFolder)}
+#' @docType methods
 #' @export
 setGeneric("flowFrameFromFlowJoCSV", function(object, dropCompPrefix=FALSE){
   standardGeneric("flowFrameFromFlowJoCSV")
 })
+#' @rdname flowFrameFromFlowJoCSV
 setMethod("flowFrameFromFlowJoCSV",
           "insideFlow",
           function(object, dropCompPrefix=FALSE){
@@ -599,13 +610,14 @@ setMethod("flowFrameFromFlowJoCSV",
 #' @param fsYdim Dimension 2 for grid size used for clustering
 #' @param numClust Number of clusters to return from FlowSOM
 #' @importFrom FlowSOM UpdateFlowSOM FlowSOM NewData
-#' @rdname calcFlowSOM
 #' @examples \dontrun{
 #' object <- calcFlowSOM(object, applyOnMap=FALSE, fsXdim=10, fsYdim=10, numClust=8)}
+#' @docType methods
 #' @export
 setGeneric("calcFlowSOM", function(object, applyOnMap, trainedMap, fsXdim, fsYdim, numClust){
   standardGeneric("calcFlowSOM")
 })
+#' @rdname calcFlowSOM
 setMethod("calcFlowSOM",
           "insideFlow",
           function(object, applyOnMap, trainedMap, fsXdim, fsYdim, numClust) {
@@ -653,13 +665,14 @@ setMethod("calcFlowSOM",
 #' @importFrom ggnewscale new_scale
 #' @importFrom grDevices colorRampPalette
 #' @importFrom ggpubr as_ggplot get_legend ggarrange
-#' @rdname plotFlowSOMResults
 #' @examples \dontrun{
 #' myobject <- plotFlowSOMResults(object, popName, coFact, outsFolder)}
+#' @docType methods
 #' @export
 setGeneric("plotFlowSOMResults", function(object, plotAllAsStars, plotPar, radarColor, plotBgd, numClust){
   standardGeneric("plotFlowSOMResults")
 })
+#' @rdname plotFlowSOMResults
 setMethod("plotFlowSOMResults",
           "insideFlow",
           function(object, plotAllAsStars, plotPar, radarColor, plotBgd, numClust) {
