@@ -1,3 +1,0 @@
-# Build on travis. jluthy
-language: R
-cache: packages
