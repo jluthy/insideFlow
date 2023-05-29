@@ -2,7 +2,7 @@
 % Please edit documentation in R/insideFlow.R
 \name{loadFlowJoCSV}
 \alias{loadFlowJoCSV}
-\title{Load data in a insideFlow object}
+\title{Load data into insideFlow object}
 \usage{
 loadFlowJoCSV(object, csvPath)
 }
@@ -15,7 +15,7 @@ loadFlowJoCSV(object, csvPath)
 Returns the newly created object
 }
 \description{
-Load data in a insideFlow object
+Load data into insideFlow object
 }
 \examples{
 inputCSVpath <- "/Documents/ExtNode.csv"

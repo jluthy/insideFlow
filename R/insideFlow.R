@@ -1,13 +1,7 @@
-#' @title insideFlow
-#'
-#'
-NULL
-#'
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Class definition
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#' The indsideFlow Class
-#'
+#' @title The InsideFlow Class
 #' @description
 #' The insideFlow object is a representation of a gated population of cells that
 #' are exported from a FlowJo plugin process. These files loaded into the object
@@ -28,7 +22,7 @@ NULL
 #' @slot Rphenograph The results from clustering with Phenograph
 #' @slot FastPhenograph The results from the FastPG algorithm
 #' @slot FlowSOMClusters The results from FlowSOM clustering
-#' @slot EmbedSOMReduction The low-dimensional embedding result and map
+#' @slot DimReduction The low-dimensional embedding result and map
 #' @slot ClustRCheck The results from cluster evaluation with ClustRCheck
 #' @slot Taylor The results from cluster evaluation via Taylor Index
 #'
@@ -46,7 +40,7 @@ insideFlow <- setClass("insideFlow",
            Rphenograph = "list",
            FastPhenograph = "list",
            FlowSOMClusters = "list",
-           EmbedSOMReduction = "list",
+           DimReduction = "list",
            ClustRCheck = "list",
            Taylor = "list"
          ),
@@ -88,7 +82,7 @@ insideFlow <- setClass("insideFlow",
                                   clustNumber=matrix(),
                                   som=list()
            ),
-           EmbedSOMReduction = list(embeddingMat=matrix(),
+           DimReduction = list(embeddingMat=matrix(),
                                     embeddingType="character",
                                     map="ANY"
            ),
@@ -101,8 +95,7 @@ insideFlow <- setClass("insideFlow",
 #######################################################################
 ##         BASIC SLOT QUERIES     ##
 #######################################################################
-#' View the unique run identifier
-#'
+#' @title View the unique run identifier
 #' @return Returns the runID generated from the plugin process.
 #' @param object A insideFlow object
 #' @rdname getRunID
@@ -122,8 +115,7 @@ setMethod("getRunID",
           }
 )
 #'
-#' View parameter names
-#'
+#' @title View parameter names
 #' @return Returns the parameter names from the exported population
 #' @param object A insideFlow object
 #' @rdname getParNames
@@ -147,8 +139,7 @@ setMethod("getParNames",
             }
           })
 #'
-#' View stain names
-#'
+#' @title View stain names
 #' @return Returns the stain names if present from the exported population
 #' @param object A insideFlow object
 #' @rdname getStainNames
@@ -174,13 +165,12 @@ setMethod("getStainNames",
 #######################################################################
 ##         Load a file from single csv file     ##
 #######################################################################
-#' Load data in a insideFlow object
-#'
+#' @title Load data into insideFlow object
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param csvPath The path to the exported csv file from FlowJo
 #' @rdname loadFlowJoCSV
-#' @importFrom data.table
+#' @importFrom data.table fread
 #' @examples
 #' inputCSVpath <- "/Documents/ExtNode.csv"
 #' myobject <- loadFlowJoCSV(object, inputCSVpath)
@@ -191,7 +181,7 @@ setGeneric("loadFlowJoCSV", function(object, csvPath) {
 setMethod("loadFlowJoCSV",
           "insideFlow",
           function(object, csvPath){
-            data <- read.csv(csvPath, check.names=FALSE)
+            data <- fread(csvPath, check.names=FALSE)
             cellIdsColumn <- rep(NA, nrow(data))
             cellIds <- data.frame(CellIdDP = cellIdsColumn)
             names(cellIds) <- CellIdDP
@@ -235,15 +225,14 @@ setMethod("loadFlowJoCSV",
 #######################################################################
 ##         Load a data frame or Table     ##
 #######################################################################
-#' Load a data.table into insideFlow object
-#'
+#' @title Load a data.table into insideFlow object
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param data The data object to load into insideFlow object
 #' @rdname loadFlowJoDataTable
-#' @importFrom data.table
+#' @importFrom data.table fread
 #' @examples
-#' exMatrix <- data.table::fread("/Documents/ExtNode.csv")
+#' exMatrix <- fread("/Documents/ExtNode.csv")
 #' myobject <- loadFlowJoDataTable(object, exMatrix)
 #' @export
 setGeneric("loadFlowJoDataTable", function(object, data) {
@@ -295,13 +284,12 @@ setMethod("loadFlowJoDataTable",
 ################################################################
 #    Prepare for batch corrections cyCombine #
 ################################################################
-#' Transform data before batch correction step
-#'
+#' @title Transform data before batch correction step
 #' @return Returns the object with asinh-transformed values to batch correct
 #' @param object A insideFlow object
 #' @param fjMarkersList The selected list of markers to normalize
 #' @param fjCofactor The selected Cofactor value to apply
-#' @importFrom cyCombine
+#' @importFrom cyCombine transform_asinh
 #' @rdname prepareBEC
 #' @examples \dontrun{
 #' myobject <- prepareBEC(object, markers, cofact)}
@@ -326,13 +314,15 @@ setMethod("prepareBEC",
 ################################################################
 #    Perform Batch Correction cyCombine #
 ################################################################
+#' @title Performs batch correction with cyCombine
 #' @return Returns the batch corrected object
 #' @param object A insideFlow object
 #' @param batchID The selected list of markers to normalize
 #' @param normMethod The selected Cofactor value to apply
 #' @param xdim The first dimension of SOM used
 #' @param ydim The second dimension of SOM used
-#' @importFrom cyCombine
+#' @importFrom cyCombine normalize
+#' @importFrom cyCombine create_som
 #' @rdname runBatch_correct
 #' @examples \dontrun{
 #' myobject <- runBatch_correct(object, bID, nrmMethod, xdim, ydim)}
@@ -362,13 +352,16 @@ setMethod("runBatch_correct",
             return(object)
           }
 )
-
+################################################################
+##    Returns Plots Post Batch Correction With cyCombine     ##
+################################################################
+#' @title Return plots comparing markers after batch normalization
 #' @return Returns the plots from cyCombine showing normalized histograms
 #' @param object A insideFlow object
 #' @param fjPopName The name of selected population in FlowJo
 #' @param fjCofactor The selected Cofactor value to apply
 #' @param outPutFolder The path to the output folder
-#' @importFrom cyCombine
+#' @importFrom cyCombine plot_density
 #' @rdname normalizedPlots
 #' @examples \dontrun{
 #' normalizedPlots(object, popName, coFact, outsFolder)}
@@ -398,10 +391,14 @@ setMethod("normalizedPlots",
 
             return(object)
           })
+#######################################################################
+##         Reverse transform before exporting FCS post cyCombine     ##
+#######################################################################
+#' @title Reverse transforms data matix before exporting to FlowJo
 #' @return Returns reversed transformed data matrix before export to FlowJo
 #' @param object A insideFlow object
 #' @param fjCofactor The selected Cofactor value to apply
-#' @importFrom flowCore
+#' @importFrom cyCombine transform_asinh
 #' @rdname reverseTransform
 #' @examples \dontrun{
 #' myobject <- reverseTransform(object, popName, coFact, outsFolder)}
@@ -424,16 +421,15 @@ setMethod("reverseTransform",
           }
 )
 #######################################################################
-##         Cleanup Object before exporting FCS post cyCombine     ##
+##         Cleanup Object before exporting FCS post cyCombine        ##
 #######################################################################
-#' Clean up object before saving
-#'
+#' @title Cleanup Object
 #' @return Returns the light-weight object cleaned of transformed data slots
 #' from batch correction processes
 #' @param object A insideFlow object
 #' @rdname cleanupFJobj
-#' @examples
-#' myobject <- cleanupFJobj(object)
+#' @examples \dontrun{
+#' myobject <- cleanupFJobj(object)}
 #' @export
 setGeneric("cleanupFJobj", function(object){
   standardGeneric("cleanupFJobj")
@@ -442,7 +438,6 @@ setMethod("cleanupFJobj",
           "insideFlow",
           function(object){
             if(!is.null(object@inputCSV$X)){
-              # remove added cols from cyCombine
               # remove added cols from cyCombine
               if("id" %in% colnames(object@inputCSV$X)){
                 object@inputCSV$X[["id"]] <- NULL
@@ -469,6 +464,7 @@ setMethod("cleanupFJobj",
 ################################################################
 #    Build a FlowFrame  #
 ################################################################
+#' @title Build a Flowframe from CSV file expression matrix
 #' @return Returns reversed transformed data matrix before export to FlowJo
 #' @param object A insideFlow object
 #' @param dropCompPrefix Boolean to allow for paramName cleanup
@@ -593,7 +589,7 @@ setMethod("flowFrameFromFlowJoCSV",
 ################################################################
 #    Perform FlowSOM Clustering  #
 ################################################################
-## FlowSOM functions so we can modify text size of radar legend ##
+#' @title Perform FlowSOM Clustering
 #' @return Returns object with FlowSOM clustering results
 #' @param object An insideFlow object
 #' @param applyOnMap Boolean to apply to trained map or not
@@ -601,10 +597,10 @@ setMethod("flowFrameFromFlowJoCSV",
 #' @param fsXdim Dimension 1 for grid size used for clustering
 #' @param fsYdim Dimension 2 for grid size used for clustering
 #' @param numClust Number of clusters to return from FlowSOM
-#' @importFrom FlowSOM
+#' @importFrom FlowSOM UpdateFlowSOM FlowSOM
 #' @rdname calcFlowSOM
-#' @example
-#' object <- calcFlowSOM(object, applyOnMap=FALSE, fsXdim=10, fsYdim=10, numClust=8)
+#' @examples \dontrun{
+#' object <- calcFlowSOM(object, applyOnMap=FALSE, fsXdim=10, fsYdim=10, numClust=8)}
 #' @export
 setGeneric("calcFlowSOM", function(object, applyOnMap, trainedMap, fsXdim, fsYdim, numClust){
   standardGeneric("calcFlowSOM")
@@ -635,12 +631,10 @@ setMethod("calcFlowSOM",
 
             return(object)
           })
-
-
-
 ################################################################
 #    Plot FlowSOM Result Images  #
 ################################################################
+#' @title Plot FlowSOM Images
 #' @return Returns reversed transformed data matrix before export to FlowJo
 #' @param object A insideFlow object
 #' @param plotAllAsStars Boolean to plot MST by selected param or with piecharts
@@ -648,6 +642,12 @@ setMethod("calcFlowSOM",
 #' @param radarColor The selected color palette for minimum spanning tree plot
 #' @param plotBgd Color palette for mst nodes
 #' @param numClust Number of metaclusters requested by user
+#' @importFrom FlowSOM AddStars
+#' @importFrom FlowSOM AddStarsPies
+#' @importFrom FlowSOM AddLabels
+#' @importFrom FlowSOM UpdateFlowSOM
+#' @importFrom FlowSOM GetChannels
+#' @importFrom FlowSOM PlotFlowSOM
 #' @rdname plotFlowSOMResults
 #' @examples \dontrun{
 #' myobject <- plotFlowSOMResults(object, popName, coFact, outsFolder)}
@@ -930,7 +930,6 @@ setMethod("plotFlowSOMResults",
 
 
           })
-
 ################################################################
 #    Perform Phenograph Clustering  #
 ################################################################

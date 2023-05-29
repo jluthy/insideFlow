@@ -2,7 +2,7 @@
 % Please edit documentation in R/insideFlow.R
 \name{cleanupFJobj}
 \alias{cleanupFJobj}
-\title{Clean up object before saving}
+\title{Cleanup Object}
 \usage{
 cleanupFJobj(object)
 }
@@ -14,8 +14,9 @@ Returns the light-weight object cleaned of transformed data slots
 from batch correction processes
 }
 \description{
-Clean up object before saving
+Cleanup Object
 }
 \examples{
-myobject <- cleanupFJobj(object)
+\dontrun{
+myobject <- cleanupFJobj(object)}
 }

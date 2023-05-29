@@ -4,7 +4,7 @@
 \name{insideFlow-class}
 \alias{insideFlow-class}
 \alias{insideFlow}
-\title{The indsideFlow Class}
+\title{The InsideFlow Class}
 \description{
 The insideFlow object is a representation of a gated population of cells that
 are exported from a FlowJo plugin process. These files loaded into the object
@@ -38,7 +38,7 @@ slots to access are listed below.
 
 \item{\code{FlowSOMClusters}}{The results from FlowSOM clustering}
 
-\item{\code{EmbedSOMReduction}}{The low-dimensional embedding result and map}
+\item{\code{DimReduction}}{The low-dimensional embedding result and map}
 
 \item{\code{ClustRCheck}}{The results from cluster evaluation with ClustRCheck}
 
