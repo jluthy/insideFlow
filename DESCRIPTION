@@ -1,6 +1,6 @@
 Package: insideFlow
-Title: What the Package Does (One Line, Title Case)
-Version: 1.0.0
+Title: InsideFlow Class Manages FlowJo Plugin Processes
+Version: 1.0.1
 Authors@R: 
     person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))
 Description: Takes outputs from R-based FlowJo plugin processes and manages the
@@ -17,3 +17,10 @@ LazyData: true
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    cyCombine,
+    data.table,
+    FlowSOM,
+    grDevices,
+    methods,
+    utils
