@@ -1,12 +1,12 @@
 Package: insideFlow
-Title: InsideFlow Class Manages FlowJo Plugin Processes
+Title: insideFlow: Manage R-based FlowJo Plugin Processes
 Version: 1.0.1
 Authors@R: 
     person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))
 Description: Takes outputs from R-based FlowJo plugin processes and manages the
   data and workflow by storing the input data, metadata, and new derived parameters
-  from running algortithms such as clustering, dimesionality reduction, batch correction,
-  or data cleamup.
+  from running algorithms such as clustering, dimensionality reduction, batch correction,
+  or data cleanup.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -20,7 +20,10 @@ Config/testthat/edition: 3
 Imports: 
     cyCombine,
     data.table,
+    dplyr,
     FlowSOM,
+    ggnewscale,
+    ggplot2,
+    ggpubr,
     grDevices,
-    methods,
-    utils
+    methods

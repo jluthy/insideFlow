@@ -468,6 +468,7 @@ setMethod("cleanupFJobj",
 #' @return Returns reversed transformed data matrix before export to FlowJo
 #' @param object A insideFlow object
 #' @param dropCompPrefix Boolean to allow for paramName cleanup
+#' @importFrom methods new
 #' @rdname flowFrameFromFlowJoCSV
 #' @examples \dontrun{
 #' myobject <- flowFrameFromFlowJoCSV(object, popName, coFact, outsFolder)}
@@ -597,7 +598,7 @@ setMethod("flowFrameFromFlowJoCSV",
 #' @param fsXdim Dimension 1 for grid size used for clustering
 #' @param fsYdim Dimension 2 for grid size used for clustering
 #' @param numClust Number of clusters to return from FlowSOM
-#' @importFrom FlowSOM UpdateFlowSOM FlowSOM
+#' @importFrom FlowSOM UpdateFlowSOM FlowSOM NewData
 #' @rdname calcFlowSOM
 #' @examples \dontrun{
 #' object <- calcFlowSOM(object, applyOnMap=FALSE, fsXdim=10, fsYdim=10, numClust=8)}
@@ -642,14 +643,16 @@ setMethod("calcFlowSOM",
 #' @param radarColor The selected color palette for minimum spanning tree plot
 #' @param plotBgd Color palette for mst nodes
 #' @param numClust Number of metaclusters requested by user
-#' @importFrom FlowSOM AddStars
-#' @importFrom FlowSOM AddStarsPies
-#' @importFrom FlowSOM AddLabels
-#' @importFrom FlowSOM UpdateFlowSOM
-#' @importFrom FlowSOM GetChannels
-#' @importFrom FlowSOM PlotFlowSOM
+#' @importFrom FlowSOM AddStars AddStarsPies AddLabels
+#' @importFrom FlowSOM UpdateFlowSOM GetChannels PlotFlowSOM FlowSOM_colors
 #' @importFrom grDevices hcl.colors
 #' @importFrom grDevices rainbow
+#' @importFrom ggplot2 aes coord_fixed geom_segment ggplot
+#' @importFrom ggplot2 theme theme_void labs xlim
+#' @importFrom dplyr count
+#' @importFrom ggnewscale new_scale
+#' @importFrom grDevices colorRampPalette
+#' @importFrom ggpubr as_ggplot get_legend ggarrange
 #' @rdname plotFlowSOMResults
 #' @examples \dontrun{
 #' myobject <- plotFlowSOMResults(object, popName, coFact, outsFolder)}
