@@ -99,8 +99,8 @@ insideFlow <- setClass("insideFlow",
 #' @return Returns the runID generated from the plugin process.
 #' @param object A insideFlow object
 #' @rdname getRunID
-#' @examples
-#' getRunID(object)
+#' @examples \dontrun{
+#' getRunID(object)}
 #' @export
 setGeneric("getRunID", function(object) {
   standardGeneric("getRunID")
@@ -119,8 +119,8 @@ setMethod("getRunID",
 #' @return Returns the parameter names from the exported population
 #' @param object A insideFlow object
 #' @rdname getParNames
-#' @examples
-#' getParNames(object)
+#' @examples \dontrun{
+#' getParNames(object)}
 #' @export
 setGeneric("getParNames", function(object) {
   standardGeneric("getParNames")
@@ -143,8 +143,8 @@ setMethod("getParNames",
 #' @return Returns the stain names if present from the exported population
 #' @param object A insideFlow object
 #' @rdname getStainNames
-#' @examples
-#' getStainNames(object)
+#' @examples \dontrun{
+#' getStainNames(object)}
 #' @export
 setGeneric("getStainNames", function(object) {
   standardGeneric("getStainNames")
@@ -171,9 +171,9 @@ setMethod("getStainNames",
 #' @param csvPath The path to the exported csv file from FlowJo
 #' @rdname loadFlowJoCSV
 #' @importFrom data.table fread
-#' @examples
+#' @examples \dontrun{
 #' inputCSVpath <- "/Documents/ExtNode.csv"
-#' myobject <- loadFlowJoCSV(object, inputCSVpath)
+#' myobject <- loadFlowJoCSV(object, inputCSVpath)}
 #' @export
 setGeneric("loadFlowJoCSV", function(object, csvPath) {
   standardGeneric("loadFlowJoCSV")
@@ -231,9 +231,9 @@ setMethod("loadFlowJoCSV",
 #' @param data The data object to load into insideFlow object
 #' @rdname loadFlowJoDataTable
 #' @importFrom data.table fread
-#' @examples
+#' @examples \dontrun{
 #' exMatrix <- fread("/Documents/ExtNode.csv")
-#' myobject <- loadFlowJoDataTable(object, exMatrix)
+#' myobject <- loadFlowJoDataTable(object, exMatrix)}
 #' @export
 setGeneric("loadFlowJoDataTable", function(object, data) {
   standardGeneric("loadFlowJoDataTable")
@@ -648,6 +648,8 @@ setMethod("calcFlowSOM",
 #' @importFrom FlowSOM UpdateFlowSOM
 #' @importFrom FlowSOM GetChannels
 #' @importFrom FlowSOM PlotFlowSOM
+#' @importFrom grDevices hcl.colors
+#' @importFrom grDevices rainbow
 #' @rdname plotFlowSOMResults
 #' @examples \dontrun{
 #' myobject <- plotFlowSOMResults(object, popName, coFact, outsFolder)}

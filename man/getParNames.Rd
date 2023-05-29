@@ -19,5 +19,6 @@ Returns the parameter names from the exported population
 View parameter names
 }
 \examples{
-getParNames(object)
+\dontrun{
+getParNames(object)}
 }

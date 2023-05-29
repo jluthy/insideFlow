@@ -19,5 +19,6 @@ Returns the stain names if present from the exported population
 View stain names
 }
 \examples{
-getStainNames(object)
+\dontrun{
+getStainNames(object)}
 }

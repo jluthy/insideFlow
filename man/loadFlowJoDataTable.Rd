@@ -18,6 +18,7 @@ Returns the newly created object
 Load a data.table into insideFlow object
 }
 \examples{
+\dontrun{
 exMatrix <- fread("/Documents/ExtNode.csv")
-myobject <- loadFlowJoDataTable(object, exMatrix)
+myobject <- loadFlowJoDataTable(object, exMatrix)}
 }

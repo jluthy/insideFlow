@@ -19,5 +19,6 @@ Returns the runID generated from the plugin process.
 View the unique run identifier
 }
 \examples{
-getRunID(object)
+\dontrun{
+getRunID(object)}
 }

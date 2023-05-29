@@ -18,6 +18,7 @@ Returns the newly created object
 Load data into insideFlow object
 }
 \examples{
+\dontrun{
 inputCSVpath <- "/Documents/ExtNode.csv"
-myobject <- loadFlowJoCSV(object, inputCSVpath)
+myobject <- loadFlowJoCSV(object, inputCSVpath)}
 }
