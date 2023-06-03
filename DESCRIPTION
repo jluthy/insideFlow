@@ -1,5 +1,5 @@
 Package: insideFlow
-Title: Manage R-based FlowJo Plugin Processes
+Title: Manage R-Based FlowJo Plugin Processes
 Version: 1.0.1
 Authors@R: 
     person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))
@@ -18,7 +18,7 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
-    cyCombine,
+    cyCombine (>= 0.2.15),
     data.table,
     dplyr,
     FlowSOM,
@@ -27,3 +27,5 @@ Imports:
     ggpubr,
     grDevices,
     methods
+Remotes:  
+    biosurf/cyCombine

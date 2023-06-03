@@ -308,7 +308,7 @@ setMethod("prepareBEC",
           function(object, fjMarkersList, fjCofactor){
             object@BatchCorrect$markersToNorm <- fjMarkersList
 
-            object@BatchCorrect$uncorrected <- transform_asinh(
+            object@BatchCorrect$uncorrected <- cyCombine::transform_asinh(
               df = as.data.frame(object@inputCSV$X),
               markers = object@BatchCorrect$markersToNorm,
               cofactor = fjCofactor,
@@ -343,16 +343,16 @@ setMethod("runBatch_correct",
             object@BatchCorrect$uncorrected$batch <- as.factor(object@BatchCorrect$uncorrected[,batchID])
             # Run batch correction
             object@BatchCorrect$labels <- object@BatchCorrect$uncorrected %>%
-              normalize(markers = object@BatchCorrect$markersToNorm,
+              cyCombine::normalize(markers = object@BatchCorrect$markersToNorm,
                         norm_method = normMethod) %>%
-              create_som(markers = object@BatchCorrect$markersToNorm,
+              cyCombine::create_som(markers = object@BatchCorrect$markersToNorm,
                          rlen = 10,
                          xdim = xdim,
                          ydim = ydim)
 
             # 'covar' is the optional second keyword present in the exported data.
             object@BatchCorrect$corrected.asinh.transformed <- object@BatchCorrect$uncorrected %>%
-              correct_data(label = object@BatchCorrect$labels,
+              cyCombine::correct_data(label = object@BatchCorrect$labels,
                            markers = object@BatchCorrect$markersToNorm)#,
             # covar = "status")
 
@@ -392,7 +392,7 @@ setMethod("normalizedPlots",
             # Plots can be made like so:
             # png("NUL")
             # pdf("NUL")
-            plot_density(uncorrected = myFJobj@BatchCorrect$uncorrected,
+            cyCombine::plot_density(uncorrected = myFJobj@BatchCorrect$uncorrected,
                          corrected = myFJobj@BatchCorrect$corrected.asinh.transformed,
                          markers = myFJobj@BatchCorrect$markersToNorm,
                          filename = paste0(outPutFolder, "Density_plot_", fjPopName, "_cofactor_" , fjCofactor,"_.png" ))
@@ -419,7 +419,7 @@ setMethod("reverseTransform",
           "insideFlow",
           function(object, fjCofactor){
             # Transform back to scaled values before export
-            object@inputCSV$X <- transform_asinh(
+            object@inputCSV$X <- cyCombine::transform_asinh(
               df = object@BatchCorrect$corrected.asinh.transformed,
               markers = object@BatchCorrect$markersToNorm,
               cofactor = fjCofactor,
