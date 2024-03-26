@@ -47,7 +47,6 @@ insideFlow <- setClass("insideFlow",
          prototype = list(
            runID = "runID",
            inputCSV = list(X=matrix(),
-                           cellIds=matrix(),
                            eventNumbers=matrix()
            ),
            parameterNames = list(fjParNames=NULL,
@@ -172,60 +171,61 @@ setMethod("getStainNames",
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param csvPath The path to the exported csv file from FlowJo
+#' @param eventNumber The column name for event numbers or cell ids
 #' @importFrom data.table fread
 #' @examples \dontrun{
 #' inputCSVpath <- "/Documents/ExtNode.csv"
-#' myobject <- loadFlowJoCSV(object, inputCSVpath)}
+#' myobject <- loadFlowJoCSV(object, inputCSVpath, eventNumber = "Event #")}
 #' @docType methods
 #' @export
-setGeneric("loadFlowJoCSV", function(object, csvPath) {
+setGeneric("loadFlowJoCSV", function(object, csvPath, eventNumber = "Event #") {
   standardGeneric("loadFlowJoCSV")
 })
 #' @rdname loadFlowJoCSV
 setMethod("loadFlowJoCSV",
           "insideFlow",
-          function(object, csvPath){
-            data <- fread(csvPath, check.names=FALSE)
-            cellIdsColumn <- rep(NA, nrow(data))
-            cellIds <- data.frame(CellIdDP = cellIdsColumn)
-            names(cellIds) <- CellIdDP
-            if (CellIdDP %in% names(data)) {
-              cellIds <- data[, CellIdDP]
-              data <- data[, -which(names(data) %in% c(CellIdDP))]
+          function(object, csvPath, eventNumber = "Event #") {
+            # Ensure data.table is available
+            if (!requireNamespace("data.table", quietly = TRUE)) {
+              stop("data.table package is not available")
             }
 
-            EventNumberColumn <- rep(NA, nrow(data))
-            eventNumbers <- data.frame(EventNumberDP = EventNumberColumn)
-            names(eventNumbers) <- EventNumberDP
-            if (EventNumberDP %in% names(data)) {
-              eventNumbers <- data[, EventNumberDP]
-              data <- data[, -which(names(data) %in% c(EventNumberDP))]
+            # Using fread from data.table
+            data <- data.table::fread(csvPath, check.names = FALSE)
+
+            # Initialize empty matrix for eventNumbers
+            eventNumbers <- matrix(nrow = nrow(data), ncol = 0)
+
+            # Handle specified eventNumber column
+            if (eventNumber %in% names(data)) {
+              eventNumbers <- as.matrix(data[[eventNumber]])
+              data[, (eventNumber) := NULL] # Remove specified eventNumber column after extracting it
+            } else {
+              warning(paste("Column", eventNumber, "not found in the provided CSV. eventNumbers will be left empty."))
             }
 
-            ## Again splitting by " :: " but this time taking the second part (if present) as description
-            colNames <- colnames(data)
-            npar <- length(colNames)
-            parNames <- unlist(lapply(1:npar, function(i) {
-                       unlist(strsplit(colNames[i], " :: "))[1]
-                   }))
-            stNames <- unlist(lapply(1:npar, function(i) {
-              s <- unlist(strsplit(colNames[i], " :: "))
-              if (length(s) >= 2) s[2]
-              else NA
-            }))
+            # Extracting parameter and stain names
+            colNames <- names(data)
+            parNames <- sapply(colNames, function(x) unlist(strsplit(x, " :: "))[1])
+            stNames <- sapply(colNames, function(x) {
+              parts <- unlist(strsplit(x, " :: "))
+              if(length(parts) > 1) parts[2] else NA
+            })
 
-            # Trim the leading and tailing whitespaces
-            colnames(data) <- gsub("^\\s+|\\s+$", "", colnames(data))
-            object@parameterNames <- list(fjParNames=parNames,
-                                          fjStainNames=stNames)
+            # Trim whitespace from column names
+            names(data) <- trimws(names(data))
 
-            object@inputCSV <- list(X=as.matrix(data),cellIds=as.matrix(cellIds),eventNumbers=as.matrix(eventNumbers))
-            colnames(object@inputCSV$cellIds) <- "CellId"
-            colnames(object@inputCSV$eventNumbers) <- "EventNumberDP"
+            # Update object slots
+            object@parameterNames <- list(fjParNames = parNames, fjStainNames = stNames)
+            object@inputCSV <- list(X = as.matrix(data),
+                                    eventNumbers = as.matrix(eventNumbers, dimnames = list(NULL, "EventNumber")))
+
             return(object)
           }
-
 )
+
+
+
 #######################################################################
 ##         Load a data frame or Table     ##
 #######################################################################
@@ -233,58 +233,51 @@ setMethod("loadFlowJoCSV",
 #' @return Returns the newly created object
 #' @param object A insideFlow object
 #' @param data The data object to load into insideFlow object
+#' @param eventNumberColName The column name for event numbers
 #' @importFrom data.table fread
 #' @examples \dontrun{
 #' exMatrix <- fread("/Documents/ExtNode.csv")
-#' myobject <- loadFlowJoDataTable(object, exMatrix)}
+#' myobject <- loadFlowJoDataTable(object, exMatrix, eventNumberColName = "Event #")}
 #' @docType methods
 #' @export
-setGeneric("loadFlowJoDataTable", function(object, data) {
+setGeneric("loadFlowJoDataTable", function(object, data,eventNumberColName = "Event #") {
   standardGeneric("loadFlowJoDataTable")
 })
 #' @rdname loadFlowJoDataTable
 setMethod("loadFlowJoDataTable",
           "insideFlow",
-          function(object, data){
-            cellIdsColumn <- rep(NA, nrow(data))
-            cellIds <- data.frame(CellIdDP = cellIdsColumn)
-            names(cellIds) <- CellIdDP
-            if (CellIdDP %in% names(data)) {
-              cellIds <- data[, CellIdDP]
-              data <- data[, -which(names(data) %in% c(CellIdDP))]
+          function(object, data, eventNumberColName = "EventNumber"){
+            # Initialize columns for eventNumbers with NAs
+            eventNumbers <- rep(NA, nrow(data))
+
+            if (eventNumberColName %in% names(data)) {
+              eventNumbers <- data[[eventNumberColName]]
+              data[[eventNumberColName]] <- NULL # Remove the column after extraction
+            } else {
+              warning(paste("Column", eventNumberColName, "not found in the provided data. Filling with NA."))
             }
 
-            EventNumberColumn <- rep(NA, nrow(data))
-            eventNumbers <- data.frame(EventNumberDP = EventNumberColumn)
-            names(eventNumbers) <- EventNumberDP
-            if (EventNumberDP %in% names(data)) {
-              eventNumbers <- data[, EventNumberDP]
-              data <- data[, -which(names(data) %in% c(EventNumberDP))]
-            }
+            # Extracting parameter and stain names
+            colNames <- names(data)
+            parNames <- sapply(colNames, function(x) {
+              parts <- strsplit(x, " :: ")
+              parts[[1]][1]
+            })
+            stNames <- sapply(colNames, function(x) {
+              parts <- strsplit(x, " :: ")
+              if(length(parts[[1]]) > 1) parts[[1]][2] else NA
+            })
 
-            ## Again splitting by " :: " but this time taking the second part (if present) as description
-            colNames <- colnames(data)
-            npar <- length(colNames)
-            parNames <- unlist(lapply(1:npar, function(i) {
-              unlist(strsplit(colNames[i], " :: "))[1]
-            }))
-            stNames <- unlist(lapply(1:npar, function(i) {
-              s <- unlist(strsplit(colNames[i], " :: "))
-              if (length(s) >= 2) s[2]
-              else NA
-            }))
+            # Trim whitespace from column names
+            names(data) <- trimws(names(data))
 
-            # Trim the leading and tailing whitespaces
-            colnames(data) <- gsub("^\\s+|\\s+$", "", colnames(data))
-            object@parameterNames <- list(fjParNames=parNames,
-                                          fjStainNames=stNames)
+            # Update object slots
+            object@parameterNames <- list(fjParNames = parNames, fjStainNames = stNames)
+            object@inputCSV <- list(X = as.matrix(data),
+                                    eventNumbers = as.matrix(eventNumbers, dimnames = list(NULL, "EventNumber")))
 
-            object@inputCSV <- list(X=as.matrix(data),cellIds=as.matrix(cellIds),eventNumbers=as.matrix(eventNumbers))
-            colnames(object@inputCSV$cellIds) <- "CellId"
-            colnames(object@inputCSV$eventNumbers) <- "EventNumberDP"
             return(object)
           }
-
 )
 ################################################################
 #    Prepare for batch corrections cyCombine #
