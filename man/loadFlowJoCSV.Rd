@@ -6,14 +6,16 @@
 \alias{loadFlowJoCSV,insideFlow-method}
 \title{Load data into insideFlow object}
 \usage{
-loadFlowJoCSV(object, csvPath)
+loadFlowJoCSV(object, csvPath, eventNumber = "Event #")
 
-\S4method{loadFlowJoCSV}{insideFlow}(object, csvPath)
+\S4method{loadFlowJoCSV}{insideFlow}(object, csvPath, eventNumber = "Event #")
 }
 \arguments{
 \item{object}{A insideFlow object}
 
 \item{csvPath}{The path to the exported csv file from FlowJo}
+
+\item{eventNumber}{The column name for event numbers or cell ids}
 }
 \value{
 Returns the newly created object
@@ -24,5 +26,5 @@ Load data into insideFlow object
 \examples{
 \dontrun{
 inputCSVpath <- "/Documents/ExtNode.csv"
-myobject <- loadFlowJoCSV(object, inputCSVpath)}
+myobject <- loadFlowJoCSV(object, inputCSVpath, eventNumber = "Event #")}
 }

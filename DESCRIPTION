@@ -1,6 +1,7 @@
 Package: insideFlow
 Title: Manage R-Based FlowJo Plugin Processes
-Version: 1.0.1
+Version: 1.1.0
+Date: 2024-31-03
 Authors@R: 
     person("Joshua", "Luthy", email = "jluthy123@gmail.com", role = c("aut", "cre"))
 Description: Takes outputs from R-based FlowJo plugin processes and manages the
@@ -10,7 +11,7 @@ Description: Takes outputs from R-based FlowJo plugin processes and manages the
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: 
     R (>= 2.10)
 LazyData: true
@@ -26,6 +27,9 @@ Imports:
     ggplot2,
     ggpubr,
     grDevices,
-    methods
-Remotes:  
+    methods,
+    magrittr,
+    rlang,
+    viridis
+Remotes: 
     biosurf/cyCombine

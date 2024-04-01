@@ -6,14 +6,16 @@
 \alias{loadFlowJoDataTable,insideFlow-method}
 \title{Load a data.table into insideFlow object}
 \usage{
-loadFlowJoDataTable(object, data)
+loadFlowJoDataTable(object, data, eventNumberColName = "Event #")
 
-\S4method{loadFlowJoDataTable}{insideFlow}(object, data)
+\S4method{loadFlowJoDataTable}{insideFlow}(object, data, eventNumberColName = "EventNumber")
 }
 \arguments{
 \item{object}{A insideFlow object}
 
 \item{data}{The data object to load into insideFlow object}
+
+\item{eventNumberColName}{The column name for event numbers}
 }
 \value{
 Returns the newly created object
@@ -24,5 +26,5 @@ Load a data.table into insideFlow object
 \examples{
 \dontrun{
 exMatrix <- fread("/Documents/ExtNode.csv")
-myobject <- loadFlowJoDataTable(object, exMatrix)}
+myobject <- loadFlowJoDataTable(object, exMatrix, eventNumberColName = "Event #")}
 }

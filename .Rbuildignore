@@ -4,3 +4,5 @@
 ^revdep$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+.idea
+.DS_Store

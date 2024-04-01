@@ -10,8 +10,8 @@ plotFlowSOMResults(
   object,
   plotAllAsStars,
   plotPar,
-  radarColor,
-  plotBgd,
+  radarColor = "viridis",
+  plotBgd = "magma",
   numClust
 )
 
@@ -19,8 +19,8 @@ plotFlowSOMResults(
   object,
   plotAllAsStars,
   plotPar,
-  radarColor,
-  plotBgd,
+  radarColor = "viridis",
+  plotBgd = "magma",
   numClust
 )
 }

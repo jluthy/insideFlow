@@ -173,6 +173,7 @@ setMethod("getStainNames",
 #' @param csvPath The path to the exported csv file from FlowJo
 #' @param eventNumber The column name for event numbers or cell ids
 #' @importFrom data.table fread
+#' @importFrom data.table :=
 #' @examples \dontrun{
 #' inputCSVpath <- "/Documents/ExtNode.csv"
 #' myobject <- loadFlowJoCSV(object, inputCSVpath, eventNumber = "Event #")}
@@ -322,6 +323,7 @@ setMethod("prepareBEC",
 #' @param ydim The second dimension of SOM used
 #' @importFrom cyCombine normalize
 #' @importFrom cyCombine create_som
+#' @importFrom magrittr %>%
 #' @examples \dontrun{
 #' myobject <- runBatch_correct(object, bID, nrmMethod, xdim, ydim)}
 #' @docType methods
@@ -650,6 +652,7 @@ setMethod("calcFlowSOM",
 #' @param numClust Number of metaclusters requested by user
 #' @importFrom FlowSOM AddStars AddStarsPies AddLabels
 #' @importFrom FlowSOM UpdateFlowSOM GetChannels PlotFlowSOM FlowSOM_colors
+#' @importFrom rlang .data
 #' @importFrom grDevices hcl.colors
 #' @importFrom grDevices rainbow
 #' @importFrom ggplot2 aes coord_fixed geom_segment ggplot
@@ -658,17 +661,19 @@ setMethod("calcFlowSOM",
 #' @importFrom ggnewscale new_scale
 #' @importFrom grDevices colorRampPalette
 #' @importFrom ggpubr as_ggplot get_legend ggarrange
+#' @importFrom viridis viridis_pal
 #' @examples \dontrun{
 #' myobject <- plotFlowSOMResults(object, popName, coFact, outsFolder)}
 #' @docType methods
 #' @export
-setGeneric("plotFlowSOMResults", function(object, plotAllAsStars, plotPar, radarColor, plotBgd, numClust){
+setGeneric("plotFlowSOMResults", function(object, plotAllAsStars, plotPar, radarColor='viridis', plotBgd='magma', numClust){
   standardGeneric("plotFlowSOMResults")
 })
 #' @rdname plotFlowSOMResults
 setMethod("plotFlowSOMResults",
           "insideFlow",
           function(object, plotAllAsStars, plotPar, radarColor, plotBgd, numClust) {
+
 
             ## FlowSOM functions so we can modify text size of radar legend ##
             ParseArcs <- function(x, y, arcValues, arcHeights){
@@ -855,43 +860,18 @@ setMethod("plotFlowSOMResults",
               }
             }
 
-            if(plotBgd == "Rainbow"){
-              nodeBackgroundPalette <- grDevices::rainbow(n=numClust, alpha = 0.3 )
-            } else {
-              nodeBackgroundPalette <- hcl.colors(n=numClust, palette = plotBgd, alpha = 0.6 )
-            }
-
             n_radarSlices <-length(object@FlowSOMClusters$som$map$colsUsed)
-
-            if(radarColor == "Rainbow"){
-              radarPalette <- grDevices::rainbow(n=n_radarSlices, alpha = 0.3 )
-            } else {
-              radarPalette <- hcl.colors(n=n_radarSlices, palette = radarColor, alpha = 0.6 )
+            # Validate and set radarColor palette
+            if(!radarColor %in% c("viridis", "magma", "inferno", "plasma")) {
+              stop("Unsupported radarColor. Choose from 'viridis', 'magma', 'inferno', 'plasma'.")
             }
+            radarPalette <- viridis::viridis_pal(option = radarColor)(n_radarSlices)
 
-            # if (!plotAllAsStars) {
-            #   ## If not plotting all then make sure plotPar is among parameters in the FCS file
-            #   if (!(plotPar %in% colnames(object@flowFrameFJ$fcs))) {
-            #     plotPar2 <- gsub("[", "<", plotPar, fixed=TRUE)
-            #     plotPar2 <- gsub("]", ">", plotPar2, fixed=TRUE)
-            #     if (plotPar2 %in% colnames(object@flowFrameFJ$fcs)) {
-            #       plotPar <- plotPar2
-            #     } else {
-            #       plotPar2 <- gsub("_", "/", plotPar, fixed=TRUE)
-            #       if (plotPar2 %in% colnames(object@flowFrameFJ$fcs)) {
-            #         plotPar <- plotPar2
-            #       } else {
-            #         plotPar3 <- gsub("[", "<", plotPar2, fixed=TRUE)
-            #         plotPar3 <- gsub("]", ">", plotPar3, fixed=TRUE)
-            #         if (plotPar3 %in% colnames(object@flowFrameFJ$fcs)) {
-            #           plotPar <- plotPar3
-            #         } else {
-            #           stop(paste("The input FCS file does not contain ", plotPar), call.=FALSE)
-            #         }
-            #       }
-            #     }
-            #   }
-            # }
+            # Validate and set plotBgd palette
+            if(!plotBgd %in% c("viridis", "magma", "inferno", "plasma")) {
+              stop("Unsupported plotBgd. Choose from 'viridis', 'magma', 'inferno', 'plasma'.")
+            }
+            nodeBackgroundPalette <- viridis::viridis_pal(option = plotBgd)(numClust)
 
             if (plotAllAsStars) {
               ## Use PlotStars
